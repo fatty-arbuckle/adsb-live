@@ -1,13 +1,10 @@
 defmodule Dump1090Client.Dump1090ClientTest do
   use ExUnit.Case, async: true
 
-  setup do
-    Phoenix.PubSub.PG2.start_link Aircraft.channel, []
+  test "reply from file" do
     Phoenix.PubSub.subscribe Aircraft.channel, Aircraft.raw_adsb_topic
     Phoenix.PubSub.subscribe Aircraft.channel, Aircraft.update_topic
-  end
 
-  test "test reply from file" do
     Dump1090Client.replay_from_file "./test/data/replay_file", 0
 
     assert_receive "MSG,1,111,11111,A44728,111111,2018/11/17,21:33:06.976,2018/11/17,21:33:06.938,JBU1616 ,,,,,,,,,,,0\n", 100
