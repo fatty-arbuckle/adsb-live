@@ -30,4 +30,5 @@ defmodule Dump1090Client.MixProject do
       {:phoenix_pubsub, ">= 1.1.0"}
     ]
   end
+
 end

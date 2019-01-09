@@ -1,4 +1,4 @@
-defmodule Dump1090Client.Dump1090ClientTest do
+defmodule ReplayFileTest do
   use ExUnit.Case, async: true
 
   test "reply from file" do
@@ -45,4 +45,5 @@ defmodule Dump1090Client.Dump1090ClientTest do
 
     assert_receive "Oops\n", 100
   end
+
 end

@@ -19,7 +19,7 @@ defmodule Dump1090Client.Network.Client do
     end
 
     def on_failure(state) do
-      Logger.error("tcp failure from #{state.host}:#{state.port}. Max retries exceeded.", ansi_color: :yellow)
+      Logger.debug("tcp failure from #{state.host}:#{state.port}. Max retries exceeded.", ansi_color: :yellow)
     end
   end
 
@@ -39,6 +39,10 @@ defmodule Dump1090Client.Network.Client do
 
   def init(opts) do
     state = opts_to_initial_state(opts)
+    connect(state)
+  end
+
+  def connect(state) do
     case :gen_tcp.connect(state.host, state.port, []) do
       {:ok, _socket} ->
         state.on_connect.(state)
@@ -51,7 +55,7 @@ defmodule Dump1090Client.Network.Client do
   end
 
   def handle_info({:tcp, _socket, message}, state) do
-    Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.raw_adsb_topic, message)
+    Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.raw_adsb_topic, List.to_string(message))
     case Aircraft.ParseAdsb.parse(List.to_string(message)) do
       aircraft = %Aircraft{icoa: _icoa} ->
         Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.update_topic, aircraft)
