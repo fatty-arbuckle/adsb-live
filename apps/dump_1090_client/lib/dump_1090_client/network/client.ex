@@ -24,10 +24,10 @@ defmodule Dump1090Client.Network.Client do
   end
 
   def handle_info({:tcp, _socket, message}, state) do
-    Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.raw_adsb_topic, List.to_string(message))
+    Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.raw_adsb_topic, {:raw, List.to_string(message)})
     case Aircraft.ParseAdsb.parse(List.to_string(message)) do
       aircraft = %Aircraft{icoa: _icoa} ->
-        Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.update_topic, aircraft)
+        Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.update_topic, {:update, aircraft})
       :not_supported ->
         :ok
     end

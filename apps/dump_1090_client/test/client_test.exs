@@ -11,8 +11,8 @@ defmodule ClientTest do
     end)
     {:ok, _client} = Dump1090Client.Network.Client.start_link [host: "127.0.0.1", port: 30123]
     Task.await(server)
-    assert_receive "MSG,1,111,11111,A44728,111111,2018/11/17,21:33:06.976,2018/11/17,21:33:06.938,JBU1616 ,,,,,,,,,,,0\n", 1000
-    assert_receive %Aircraft{
+    assert_receive "{:raw, MSG,1,111,11111,A44728,111111,2018/11/17,21:33:06.976,2018/11/17,21:33:06.938,JBU1616 ,,,,,,,,,,,0\n}", 1000
+    assert_receive {:update, %Aircraft{
       altitude: nil,
       callsign: "JBU1616",
       heading: nil,
@@ -21,7 +21,7 @@ defmodule ClientTest do
       latitude: nil,
       longitude: nil,
       speed: nil
-    }, 100
+    }}, 100
   end
 
   test "that client connects after failing first" do
@@ -42,8 +42,8 @@ defmodule ClientTest do
       :gen_tcp.close(socket)
     end)
     Task.await(server)
-    assert_receive "MSG,1,111,11111,A44728,111111,2018/11/17,21:33:06.976,2018/11/17,21:33:06.938,JBU1616 ,,,,,,,,,,,0\n", 1000
-    assert_receive %Aircraft{
+    assert_receive {:raw, "MSG,1,111,11111,A44728,111111,2018/11/17,21:33:06.976,2018/11/17,21:33:06.938,JBU1616 ,,,,,,,,,,,0\n"}, 1000
+    assert_receive {:update, %Aircraft{
       altitude: nil,
       callsign: "JBU1616",
       heading: nil,
@@ -52,7 +52,7 @@ defmodule ClientTest do
       latitude: nil,
       longitude: nil,
       speed: nil
-    }, 100
+    }}, 100
   end
 
   test "that client gives up when it cannot connect after retrying" do

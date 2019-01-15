@@ -1,0 +1,314 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>cover/Elixir.WebViewerWeb.ErrorHelpers.html</title>
+<style>body {
+  font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #000;
+  border-top: 2px solid #ddd;
+  background-color: #fff;
+
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  width: 100%;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0;
+  font-weight: 100;
+  font-size: 1.1em;
+  letter-spacing: 1px;
+}
+
+h1 code {
+  font-size: 0.96em;
+}
+
+code {
+  font: 12px monospace;
+}
+
+footer {
+  background: #eee;
+  width: 100%;
+  padding: 10px 0;
+  text-align: right;
+  border-top: 1px solid #ddd;
+  display: flex;
+  flex: 1;
+  order: 2;
+  justify-content: center;
+}
+
+table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  border: 1px solid #cbcbcb;
+  color: #000;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+table thead {
+  display: none;
+}
+table td.line,
+table td.hits {
+  width: 20px;
+  background: #eaeaea;
+  text-align: center;
+  font-size: 11px;
+  padding: 0 10px;
+  color: #949494;
+}
+table td.hits {
+  width: 10px;
+  padding: 2px 5px;
+  color: rgba(0, 0, 0, 0.6);
+  background-color: #f0f0f0;
+}
+tr.miss td.line,
+tr.miss td.hits {
+  background-color: #ffdce0;
+  border-color: #fdaeb7;
+}
+tr.miss td {
+  background-color: #ffeef0;
+}
+tr.hit td.line,
+tr.hit td.hits {
+  background-color: #cdffd8;
+  border-color: #bef5cb;
+}
+tr.hit td {
+  background-color: #e6ffed;
+}
+td.source {
+  padding-left: 15px;
+  line-height: 15px;
+  white-space: pre;
+  font: 12px monospace;
+}
+</style>
+</head>
+<body>
+<h1><code>cover/Elixir.WebViewerWeb.ErrorHelpers.html</code></h1>
+<footer><p>File generated from <code>/home/phatty/projects/fatty/adsb-live/apps/web_viewer/lib/web_viewer_web/views/error_helpers.ex</code> by <a href="http://erlang.org/doc/man/cover.html">cover</a> at 2019-01-13 at 00:10:43</p></footer>
+<table>
+<tbody>
+<tr>
+<td class="line" id="L1">1</td>
+<td class="hits"></td>
+<td class="source"><code>defmodule WebViewerWeb.ErrorHelpers do</code></td>
+</tr>
+<tr>
+<td class="line" id="L2">2</td>
+<td class="hits"></td>
+<td class="source"><code>  @moduledoc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L3">3</td>
+<td class="hits"></td>
+<td class="source"><code>  Conveniences for translating and building error messages.</code></td>
+</tr>
+<tr>
+<td class="line" id="L4">4</td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L5">5</td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L6">6</td>
+<td class="hits"></td>
+<td class="source"><code>  use Phoenix.HTML</code></td>
+</tr>
+<tr>
+<td class="line" id="L7">7</td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L8">8</td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L9">9</td>
+<td class="hits"></td>
+<td class="source"><code>  Generates tag for inlined form input errors.</code></td>
+</tr>
+<tr>
+<td class="line" id="L10">10</td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L11">11</td>
+<td class="hits"></td>
+<td class="source"><code>  def error_tag(form, field) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L12">12</td>
+<td class="hits">0</td>
+<td class="source"><code>    Enum.map(Keyword.get_values(form.errors, field), fn (error) -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L13">13</td>
+<td class="hits">0</td>
+<td class="source"><code>      content_tag :span, translate_error(error), class: "help-block"</code></td>
+</tr>
+<tr>
+<td class="line" id="L14">14</td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L15">15</td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L16">16</td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L17">17</td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L18">18</td>
+<td class="hits"></td>
+<td class="source"><code>  Translates an error message using gettext.</code></td>
+</tr>
+<tr>
+<td class="line" id="L19">19</td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L20">20</td>
+<td class="hits"></td>
+<td class="source"><code>  def translate_error({msg, opts}) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L21">21</td>
+<td class="hits"></td>
+<td class="source"><code>    # Because error messages were defined within Ecto, we must</code></td>
+</tr>
+<tr>
+<td class="line" id="L22">22</td>
+<td class="hits"></td>
+<td class="source"><code>    # call the Gettext module passing our Gettext backend. We</code></td>
+</tr>
+<tr>
+<td class="line" id="L23">23</td>
+<td class="hits"></td>
+<td class="source"><code>    # also use the "errors" domain as translations are placed</code></td>
+</tr>
+<tr>
+<td class="line" id="L24">24</td>
+<td class="hits"></td>
+<td class="source"><code>    # in the errors.po file.</code></td>
+</tr>
+<tr>
+<td class="line" id="L25">25</td>
+<td class="hits"></td>
+<td class="source"><code>    # Ecto will pass the :count keyword if the error message is</code></td>
+</tr>
+<tr>
+<td class="line" id="L26">26</td>
+<td class="hits"></td>
+<td class="source"><code>    # meant to be pluralized.</code></td>
+</tr>
+<tr>
+<td class="line" id="L27">27</td>
+<td class="hits"></td>
+<td class="source"><code>    # On your own code and templates, depending on whether you</code></td>
+</tr>
+<tr>
+<td class="line" id="L28">28</td>
+<td class="hits"></td>
+<td class="source"><code>    # need the message to be pluralized or not, this could be</code></td>
+</tr>
+<tr>
+<td class="line" id="L29">29</td>
+<td class="hits"></td>
+<td class="source"><code>    # written simply as:</code></td>
+</tr>
+<tr>
+<td class="line" id="L30">30</td>
+<td class="hits"></td>
+<td class="source"><code>    #</code></td>
+</tr>
+<tr>
+<td class="line" id="L31">31</td>
+<td class="hits"></td>
+<td class="source"><code>    #     dngettext "errors", "1 file", "%{count} files", count</code></td>
+</tr>
+<tr>
+<td class="line" id="L32">32</td>
+<td class="hits"></td>
+<td class="source"><code>    #     dgettext "errors", "is invalid"</code></td>
+</tr>
+<tr>
+<td class="line" id="L33">33</td>
+<td class="hits"></td>
+<td class="source"><code>    #</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L34">34</td>
+<td class="hits">0</td>
+<td class="source"><code>    if count = opts[:count] do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L35">35</td>
+<td class="hits">0</td>
+<td class="source"><code>      Gettext.dngettext(WebViewerWeb.Gettext, "errors", msg, msg, count, opts)</code></td>
+</tr>
+<tr>
+<td class="line" id="L36">36</td>
+<td class="hits"></td>
+<td class="source"><code>    else</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L37">37</td>
+<td class="hits">0</td>
+<td class="source"><code>      Gettext.dgettext(WebViewerWeb.Gettext, "errors", msg, opts)</code></td>
+</tr>
+<tr>
+<td class="line" id="L38">38</td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L39">39</td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L40">40</td>
+<td class="hits"></td>
+<td class="source"><code>end</code></td>
+</tr>
+</tbody>
+<thead>
+<tr>
+<th>Line</th>
+<th>Hits</th>
+<th>Source</th>
+</tr>
+</thead>
+</table>
+</body>
+</html>

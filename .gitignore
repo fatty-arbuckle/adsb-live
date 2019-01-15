@@ -19,3 +19,27 @@ erl_crash.dump
 # Also ignore archive artifacts (built via "mix archive.build").
 *.ez
 
+
+
+
+# phoenix
+/app/*/db
+
+# Generated on crash by NPM
+/app/*npm-debug.log
+
+# Static artifacts
+/app/*/assets/node_modules
+
+# Since we are building assets from assets/,
+# we ignore priv/static. You may want to comment
+# this depending on your deployment strategy.
+/app/*/priv/static/
+
+# Files matching config/*.secret.exs pattern contain sensitive
+# data and you should not commit them into version control.
+#
+# Alternatively, you may comment the line below and commit the
+# secrets files as long as you replace their contents by environment
+# variables.
+/app/*/config/*.secret.exs

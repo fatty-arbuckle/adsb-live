@@ -3,10 +3,10 @@ defmodule Dump1090Client do
     Task.async(fn ->
       File.stream!(file_name)
         |> Stream.map(fn(msg) ->
-          Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.raw_adsb_topic, msg)
+          Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.raw_adsb_topic, {:raw, msg})
           case Aircraft.ParseAdsb.parse(msg) do
             aircraft = %Aircraft{icoa: _icoa} ->
-              Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.update_topic, aircraft)
+              Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.update_topic, {:update, aircraft})
             :not_supported ->
               :ok
           end
