@@ -114,6 +114,8 @@ defmodule Dump1090Client.Network.Client do
     else
       state
     end
+
+    state
   end
 
 end
