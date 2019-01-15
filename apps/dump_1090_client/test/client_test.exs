@@ -8,10 +8,11 @@ defmodule ClientTest do
       {:ok, listener} = :gen_tcp.listen(30123, [packet: :line, active: false, reuseaddr: true])
       {:ok, socket} = :gen_tcp.accept(listener, 5000)
       :gen_tcp.send(socket, "MSG,1,111,11111,A44728,111111,2018/11/17,21:33:06.976,2018/11/17,21:33:06.938,JBU1616 ,,,,,,,,,,,0\n")
+      :gen_tcp.close(socket)
     end)
     {:ok, _client} = Dump1090Client.Network.Client.start_link [host: "127.0.0.1", port: 30123]
     Task.await(server)
-    assert_receive "{:raw, MSG,1,111,11111,A44728,111111,2018/11/17,21:33:06.976,2018/11/17,21:33:06.938,JBU1616 ,,,,,,,,,,,0\n}", 1000
+    assert_receive {:raw, "MSG,1,111,11111,A44728,111111,2018/11/17,21:33:06.976,2018/11/17,21:33:06.938,JBU1616 ,,,,,,,,,,,0\n"}, 1000
     assert_receive {:update, %Aircraft{
       altitude: nil,
       callsign: "JBU1616",

@@ -53,19 +53,18 @@ defmodule Dump1090Client.Network.Client do
     end
   end
 
-  # not used?
-  # def handle_info({:tcp_closed, _socket}, state) do
-  #   case :gen_tcp.connect(state.host, state.port, []) do
-  #     {:ok, _socket} ->
-  #       new_state = %{state | failure_count: 0}
-  #       new_state.on_connect.(new_state)
-  #       {:noreply, new_state}
-  #     {:error, _reason} ->
-  #       new_state = %{state | failure_count: 1}
-  #       new_state.on_disconnect.(new_state)
-  #       {:noreply, new_state, state.retry_interval}
-  #   end
-  # end
+  def handle_info({:tcp_closed, _socket}, state) do
+    case :gen_tcp.connect(state.host, state.port, []) do
+      {:ok, _socket} ->
+        new_state = %{state | failure_count: 0}
+        new_state.on_connect.(new_state)
+        {:noreply, new_state}
+      {:error, _reason} ->
+        new_state = %{state | failure_count: 1}
+        new_state.on_disconnect.(new_state)
+        {:noreply, new_state, state.retry_interval}
+    end
+  end
 
   defp opts_to_initial_state(opts) do
     state = %{

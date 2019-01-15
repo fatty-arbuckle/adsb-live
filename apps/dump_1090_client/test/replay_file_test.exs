@@ -43,7 +43,7 @@ defmodule ReplayFileTest do
       speed: 397
     }}, 100
 
-    assert_receive "Oops\n", 100
+    assert_receive {:raw, "Oops\n"}, 100
   end
 
 end
