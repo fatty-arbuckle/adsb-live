@@ -18,4 +18,8 @@ import "phoenix_html"
 // Local files can be imported directly using relative
 // paths "./socket" or full ones "web/static/js/socket".
 
+import bootstrap from "bootstrap"
+import Popper from "popper.js"
+// import 'bootstrap/dist/js/bootstrap.bundle.js'
+
 import socket from "./socket"

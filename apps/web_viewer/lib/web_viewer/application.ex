@@ -12,6 +12,7 @@ defmodule WebViewer.Application do
       supervisor(WebViewerWeb.Endpoint, []),
       # Start your own worker by calling: WebViewer.Worker.start_link(arg1, arg2, arg3)
       # worker(WebViewer.Worker, [arg1, arg2, arg3]),
+      supervisor(Phoenix.PubSub.PG2, [Aircraft.channel, []])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

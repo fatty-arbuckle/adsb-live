@@ -3,6 +3,9 @@
 
 // To use Phoenix channels, the first step is to import Socket
 // and connect at the socket path in "lib/web/endpoint.ex":
+
+import $ from "jquery"
+
 import {Socket} from "phoenix"
 
 let socket = new Socket("/socket", {params: {token: window.userToken}})
@@ -51,6 +54,15 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 // Finally, pass the token on connect as below. Or remove it
 // from connect if you don't care about authentication.
 
+var rawMessageIntervalInSeconds = 5;
+var rawMessageCount = 0;
+var rawMessageRate = null;
+setInterval(function(){
+  var tmp = rawMessageCount;
+  rawMessageCount = 0;
+  rawMessageRate = tmp / rawMessageIntervalInSeconds;
+}, rawMessageIntervalInSeconds * 1000);
+
 socket.connect()
 
 // Now that you are connected, you can join channels with a topic:
@@ -60,7 +72,63 @@ channel.join()
   .receive("error", resp => { console.log("Unable to join", resp) })
 
 channel.on("aircraft:lobby", data => {
-  console.log(data)
+  if ('raw' in data) {
+    rawMessageCount++;
+    var rawMessages = $( "#raw_messages" )
+    rawMessages
+      .prepend( $( "<span class='text-muted text-monospace'>" + rawMessageCount + ": "+ data.raw + "</span>" ) );
+    var ITEMS_TO_SHOW = 20;
+    var items = rawMessages.children().slice(ITEMS_TO_SHOW).remove();
+
+    if (rawMessageRate != null) {
+      $('#raw_message_rate').text(rawMessageRate + " msg / second")
+    } else {
+      $('#raw_message_rate').text("Calculating message rate")
+    }
+  } else {
+    var aircraft = data.update
+    var aircraftList = $( "#aircraft" )
+    var icoa = aircraft.icoa;
+    var icoaRow = $("#" + icoa)
+    if (icoaRow.length == 0) {
+      aircraftList.prepend(
+        "<tr id='" + icoa + "'>" +
+        "<th scope='row'>" + icoa + "</th>" +
+        "<td id='callsign'>" + aircraft.callsign + "</td>" +
+        "<td id='longitude'>" + aircraft.longitude + "</td>"  +
+        "<td id='latitude'>" + aircraft.latitude + "</td>" +
+        "<td id='altitude'>" + aircraft.altitude + "</td>" +
+        "<td id='speed'>" + aircraft.speed + "</td>" +
+        "<td id='heading'>" + aircraft.heading + "</td>" +
+        // "<td id='last_seen_time'>" + aircraft.last_seen_time + "</td>" +
+        "</tr>"
+      )
+    } else {
+      if (aircraft.callsign) {
+        icoaRow.children('#callsign').text(aircraft.callsign)
+      }
+      if (aircraft.longitude) {
+        icoaRow.children('#longitude').text(aircraft.longitude)
+      }
+      if (aircraft.latitude) {
+        icoaRow.children('#latitude').text(aircraft.latitude)
+      }
+      if (aircraft.altitude) {
+        icoaRow.children('#altitude').text(aircraft.altitude)
+      }
+      if (aircraft.speed) {
+        icoaRow.children('#speed').text(aircraft.speed)
+      }
+      if (aircraft.heading) {
+        icoaRow.children('#heading').text(aircraft.heading)
+      }
+      // if (aircraft.last_seen_time) {
+      //   icoaRow.children('#last_seen_time').text(aircraft.last_seen_time)
+      // }
+      icoaRow.prependTo('#aircraft');
+    }
+  }
 })
+
 
 export default socket

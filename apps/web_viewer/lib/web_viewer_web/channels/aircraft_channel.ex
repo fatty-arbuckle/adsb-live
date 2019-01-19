@@ -15,7 +15,8 @@ defmodule WebViewerWeb.AircraftChannel do
     case message do
       {:raw, raw_message} ->
         WebViewerWeb.Endpoint.broadcast!("aircraft:lobby", "aircraft:lobby", %{raw: raw_message})
-      {:update, _aircraft} ->
+      {:update, aircraft} ->
+        WebViewerWeb.Endpoint.broadcast!("aircraft:lobby", "aircraft:lobby", %{update: aircraft})
         nil
     end
     {:noreply, state}
