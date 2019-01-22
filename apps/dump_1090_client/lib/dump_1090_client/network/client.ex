@@ -24,13 +24,20 @@ defmodule Dump1090Client.Network.Client do
   end
 
   def handle_info({:tcp, _socket, message}, state) do
-    Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.raw_adsb_topic, {:raw, List.to_string(message)})
-    case Aircraft.ParseAdsb.parse(List.to_string(message)) do
-      aircraft = %Aircraft{icoa: _icoa} ->
-        Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.update_topic, {:update, aircraft})
-      :not_supported ->
-        :ok
-    end
+    Enum.each(String.split(List.to_string(message), "\r\n"), fn (msg) ->
+      case String.length msg do
+        0 ->
+          nil
+        _ ->
+          Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.raw_adsb_topic, {:raw, msg})
+          case Aircraft.ParseAdsb.parse(msg) do
+            aircraft = %Aircraft{icoa: _icoa} ->
+              Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.update_topic, {:update, aircraft})
+            :not_supported ->
+              :ok
+          end
+      end
+    end)
     {:noreply, state}
   end
 

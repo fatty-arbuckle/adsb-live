@@ -54,9 +54,13 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 // Finally, pass the token on connect as below. Or remove it
 // from connect if you don't care about authentication.
 
+var markAsNoMessageInterval = 15 * 1000;
+var deleteAircraftInterval = 300 * 1000;
 var rawMessageIntervalInSeconds = 5;
 var rawMessageCount = 0;
 var rawMessageRate = null;
+var deleteTimerMap = {}
+
 setInterval(function(){
   var tmp = rawMessageCount;
   rawMessageCount = 0;
@@ -103,7 +107,24 @@ channel.on("aircraft:lobby", data => {
         // "<td id='last_seen_time'>" + aircraft.last_seen_time + "</td>" +
         "</tr>"
       )
+      deleteTimerMap[icoa] = setTimeout(function(key = icoa) {
+        $("#" + key).addClass("table-dark");
+        deleteTimerMap[icoa] = setTimeout(function(key = key) {
+          $("#" + key).remove();
+        }, deleteAircraftInterval);
+        // delete deleteTimerMap[icoa]
+      }, markAsNoMessageInterval);
     } else {
+      clearTimeout(deleteTimerMap[icoa]);
+      deleteTimerMap[icoa] = setTimeout(function(key = icoa) {
+        $("#" + key).addClass("table-dark");
+        deleteTimerMap[icoa] = setTimeout(function(key = key) {
+          $("#" + key).remove();
+        }, deleteAircraftInterval);
+        // delete deleteTimerMap[icoa]
+      }, markAsNoMessageInterval);
+      icoaRow.removeClass("table-dark");
+
       if (aircraft.callsign) {
         icoaRow.children('#callsign').text(aircraft.callsign)
       }
@@ -129,6 +150,7 @@ channel.on("aircraft:lobby", data => {
     }
   }
 })
+
 
 
 export default socket
