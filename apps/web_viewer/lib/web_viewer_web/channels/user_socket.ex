@@ -3,7 +3,8 @@ defmodule WebViewerWeb.UserSocket do
 
   ## Channels
   # channel "room:*", WebViewerWeb.RoomChannel
-  channel "aircraft:lobby", WebViewerWeb.AircraftChannel
+  channel "aircraft:updates", WebViewerWeb.AircraftUpdatesChannel
+  channel "aircraft:command", WebViewerWeb.AircraftCommandChannel
 
 
   ## Transports

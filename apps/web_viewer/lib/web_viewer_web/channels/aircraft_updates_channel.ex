@@ -1,7 +1,7 @@
-defmodule WebViewerWeb.AircraftChannel do
+defmodule WebViewerWeb.AircraftUpdatesChannel do
   use WebViewerWeb, :channel
 
-  def join("aircraft:lobby", payload, socket) do
+  def join("aircraft:updates", payload, socket) do
     if authorized?(payload) do
       Phoenix.PubSub.subscribe Aircraft.channel, Aircraft.raw_adsb_topic
       Phoenix.PubSub.subscribe Aircraft.channel, Aircraft.update_topic
@@ -14,9 +14,9 @@ defmodule WebViewerWeb.AircraftChannel do
   def handle_info(message, state) do
     case message do
       {:raw, raw_message} ->
-        WebViewerWeb.Endpoint.broadcast!("aircraft:lobby", "aircraft:lobby", %{raw: raw_message})
+        WebViewerWeb.Endpoint.broadcast!("aircraft:updates", "aircraft:updates", %{raw: raw_message})
       {:update, aircraft} ->
-        WebViewerWeb.Endpoint.broadcast!("aircraft:lobby", "aircraft:lobby", %{update: aircraft})
+        WebViewerWeb.Endpoint.broadcast!("aircraft:updates", "aircraft:updates", %{update: aircraft})
         nil
     end
     {:noreply, state}

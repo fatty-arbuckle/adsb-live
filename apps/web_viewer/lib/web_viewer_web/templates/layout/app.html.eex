@@ -22,6 +22,15 @@
       </main>
 
     </div> <!-- /container -->
+
+    <footer class="page-footer font-small blue pt-4">
+
+      <!-- Footer Links -->
+      <div id="connection-info" class="container-fluid text-center">
+      </div>
+
+    </footer>
+
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

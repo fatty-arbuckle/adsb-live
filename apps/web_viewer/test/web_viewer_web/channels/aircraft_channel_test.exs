@@ -1,12 +1,12 @@
-defmodule WebViewerWeb.AircraftChannelTest do
+defmodule WebViewerWeb.AircraftUpdatesChannelTest do
   use WebViewerWeb.ChannelCase
 
-  alias WebViewerWeb.AircraftChannel
+  alias WebViewerWeb.AircraftUpdatesChannel
 
   setup do
     {:ok, _, socket} =
       socket("user_id", %{some: :assign})
-      |> subscribe_and_join(AircraftChannel, "aircraft:lobby")
+      |> subscribe_and_join(AircraftUpdatesChannel, "aircraft:updates")
 
     {:ok, socket: socket}
   end
@@ -16,7 +16,7 @@ defmodule WebViewerWeb.AircraftChannelTest do
     assert_reply ref, :ok, %{"hello" => "there"}
   end
 
-  test "shout broadcasts to aircraft:lobby", %{socket: socket} do
+  test "shout broadcasts to aircraft:updates", %{socket: socket} do
     push socket, "shout", %{"hello" => "all"}
     assert_broadcast "shout", %{"hello" => "all"}
   end

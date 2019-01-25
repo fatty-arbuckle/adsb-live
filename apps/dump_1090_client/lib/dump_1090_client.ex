@@ -15,4 +15,8 @@ defmodule Dump1090Client do
         |> Stream.run
     end)
   end
+
+  def status() do
+    Dump1090Client.Network.Client.status()
+  end
 end

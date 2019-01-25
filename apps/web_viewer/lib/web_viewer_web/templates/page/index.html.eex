@@ -11,13 +11,15 @@
       <!-- <th scope="col">last_seen_time</th> -->
     </tr>
   </thead>
-  <tbody id="aircraft">
+  <tbody id="live-aircraft">
+  </tbody>
+  <tbody id="dead-aircraft">
   </tbody>
 </table>
 
 <p>
-  <a  id="raw_message_rate"
-      class="btn btn-primary"
+  <a id="raw_message_sparkline"
+      class="btn btn-primary btn-block text-right"
       data-toggle="collapse"
       href="#rawMessages"
       role="button"
@@ -26,7 +28,8 @@
       data-toggle="tooltip"
       title="Raw ADS-B messages.  Click for details."
   >
-    No messages
+    <span id="sparkline" class="float-left text-left" style="width: 85%"></span>
+    <span id="rate" float-right>No messages</span>
   </a>
 </p>
 
