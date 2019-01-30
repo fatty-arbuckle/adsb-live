@@ -1,12 +1,3 @@
-// Brunch automatically concatenates all files in your
-// watched paths. Those paths can be configured at
-// config.paths.watched in "brunch-config.js".
-//
-// However, those files will only be executed if
-// explicitly imported. The only exception are files
-// in vendor, which are never wrapped in imports and
-// therefore are always executed.
-
 // Import dependencies
 //
 // If you no longer want to use a dependency, remember
@@ -20,6 +11,6 @@ import "phoenix_html"
 
 import bootstrap from "bootstrap"
 import Popper from "popper.js"
-// import 'bootstrap/dist/js/bootstrap.bundle.js'
 
-import socket from "./socket"
+import aircraftCommands from "./aircraft_commands"
+import aircraftUpdates from "./aircraft_updates"
