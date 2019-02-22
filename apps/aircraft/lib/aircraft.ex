@@ -6,12 +6,22 @@ defmodule Aircraft do
   @enforce_keys [:icoa]
   defstruct [
     :icoa,
+    :dateGenerated,
+    :timeGenerated,
+    :dateLogged,
+    :timeLogged,
     :callsign,
     :longitude,
     :latitude,
     :altitude,
     :speed,
     :heading,
+    :vertical,
+    :squawk,
+    :alert?,
+    :emergency?,
+    :spi?,
+    :isOnGround?,
     :last_seen_time
   ]
 
