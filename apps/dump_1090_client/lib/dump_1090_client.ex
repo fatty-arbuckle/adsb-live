@@ -1,4 +1,6 @@
 defmodule Dump1090Client do
+  require Logger
+
   def replay_from_file(file_name, delay) do
     Task.async(fn ->
       File.stream!(file_name)

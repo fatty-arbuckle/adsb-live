@@ -1,4 +1,21 @@
-<table class="table table-striped">
+
+<p>
+  <a id="aircraft_update_sparkline"
+      class="btn btn-primary btn-block text-right"
+      data-toggle="collapse"
+      href="#aircraftTable"
+      role="button"
+      aria-expanded="false"
+      aria-controls="aircraftTable"
+      data-toggle="tooltip"
+      title="Tabular aircraft data.  Click for details."
+  >
+    <span id="sparkline" class="float-left text-left" style="width: 85%"></span>
+    <span id="rate" float-right>No messages</span>
+  </a>
+</p>
+
+<table id="aircraftTable" class="table table-striped collapse">
   <thead>
     <tr>
       <th scope="col">icoa</th>

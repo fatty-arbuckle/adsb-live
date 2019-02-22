@@ -13,4 +13,5 @@ import bootstrap from "bootstrap"
 import Popper from "popper.js"
 
 import aircraftCommands from "./aircraft_commands"
+import rawUpdates from "./raw_updates"
 import aircraftUpdates from "./aircraft_updates"

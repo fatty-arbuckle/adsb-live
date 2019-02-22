@@ -1,20 +1,26 @@
 import $ from "jquery"
-import {socket} from "./socket"
+// import {socket} from "./socket"
+import {Socket} from "phoenix"
 
 // config for table cleanup
 var markAsNoMessageInterval = 30 * 1000;
 var deleteAircraftInterval = 120 * 1000;
 // Updated by channel, used by graph
-var rawMessageCount = 0;
+var aircraftMessageCount = 0;
+var lastAircraftMessageCount = 0;
 // holds maps of icoa to timeouts
 var deleteTimerMap = {};
 // messages per icoa
 var messagesPerIcoa = {};
 
-let channel = socket.channel("aircraft:updates", {})
+var socket_aircraftUpdate = new Socket("/socket", {params: {token: window.userToken}})
+socket_aircraftUpdate.connect()
+
+
+let channel = socket_aircraftUpdate.channel("aircraft:updates", {})
 channel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
-  .receive("error", resp => { console.log("Unable to join", resp) })
+  .receive("ok", resp => { console.log("Joined aircraft updates successfully", resp) })
+  .receive("error", resp => { console.log("Unable to join aircraft updates", resp) })
 
 function removeAircraft(key) {
   $("#" + key).removeClass("table-dark");
@@ -30,14 +36,9 @@ function grayOutAircraft(key) {
 }
 
 channel.on("aircraft:updates", data => {
-  if ('raw' in data) {
-    ++rawMessageCount;
-    var rawMessages = $( "#raw_messages" )
-    rawMessages
-      .prepend( $( "<span class='text-muted text-monospace'>" + rawMessageCount + ": "+ data.raw + "</span>" ) );
-    var ITEMS_TO_SHOW = 20;
-    var items = rawMessages.children().slice(ITEMS_TO_SHOW).remove();
-  } else {
+  // console.log(data)
+  if ('update' in data) {
+    ++aircraftMessageCount;
     var aircraft = data.update
     var liveAircraftList = $( "#live-aircraft" )
     // var deadAircraftList = $( "#dead-aircraft" )
@@ -93,9 +94,16 @@ channel.on("aircraft:updates", data => {
 })
 
 
-rawMessageSparkline("#raw_message_sparkline", 1);
+messageSparkline("#aircraft_update_sparkline", 1, function(intervalInSeconds){
+  var messageRate = (aircraftMessageCount - lastAircraftMessageCount) / intervalInSeconds;
+  lastAircraftMessageCount = aircraftMessageCount;
+  return messageRate;
+});
 
-function rawMessageSparkline(selector, rawMessageIntervalInSeconds) {
+
+
+
+function messageSparkline(selector, intervalInSeconds, updateRate) {
 
   var sparklineChild = $(selector).children("#sparkline");
   var rateChild = $(selector).children("#rate");
@@ -139,19 +147,16 @@ function rawMessageSparkline(selector, rawMessageIntervalInSeconds) {
       .datum(data)
       .attr("class", "line")
     .transition()
-      .duration(rawMessageIntervalInSeconds * 1000)
+      .duration(intervalInSeconds * 1000)
       .ease(d3.easeLinear)
       .on("start", tick);
 
-
-  var lastRawMessageCount = 0;
   function tick() {
     data.pop();
     data.shift();
     data.unshift(0);
 
-    var rawMessageRate = (rawMessageCount - lastRawMessageCount) / rawMessageIntervalInSeconds;
-    lastRawMessageCount = rawMessageCount;
+    var rawMessageRate = updateRate(intervalInSeconds);
     rateChild.text(rawMessageRate + " msg / second")
     data.push(rawMessageRate);
 

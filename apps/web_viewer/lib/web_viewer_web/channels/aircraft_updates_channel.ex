@@ -1,5 +1,6 @@
 defmodule WebViewerWeb.AircraftUpdatesChannel do
   use WebViewerWeb, :channel
+  require Logger
 
   def join("aircraft:updates", payload, socket) do
     if authorized?(payload) do
