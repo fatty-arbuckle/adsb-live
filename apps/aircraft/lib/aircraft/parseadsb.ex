@@ -43,6 +43,21 @@ defmodule Aircraft.ParseAdsb do
       callsign:       get_field(fields, @callsign)
     }
   end
+  # ES Surface Position Message
+  defp parse_msg(["2" | fields]) do
+    %Aircraft{
+      icoa:           get_field(fields, @hexId),
+      dateGenerated:  get_field(fields, @dateGenerated),
+      timeGenerated:  get_field(fields, @timeGenerated),
+      dateLogged:     get_field(fields, @dateLogged),
+      timeLogged:     get_field(fields, @timeLogged),
+      altitude:       get_field(fields, @altitude) |> parse_integer,
+      speed:          get_field(fields, @groundSpeed) |> parse_integer,
+      heading:        get_field(fields, @track) |> parse_integer,
+      longitude:      get_field(fields, @longitude) |> parse_float,
+      latitude:       get_field(fields, @latitude) |> parse_float,
+      isOnGround?:    get_field(fields, @isOnGround) |> parse_boolean
+    }  end
   # ES Airborne Position Message
   defp parse_msg(["3" | fields]) do
     %Aircraft{
@@ -73,40 +88,73 @@ defmodule Aircraft.ParseAdsb do
       vertical:       get_field(fields, @verticalRate) |> parse_integer
     }
   end
+  # Surveillance Alt Message
+  defp parse_msg(["5" | fields]) do
+    %Aircraft{
+      icoa:           get_field(fields, @hexId),
+      dateGenerated:  get_field(fields, @dateGenerated),
+      timeGenerated:  get_field(fields, @timeGenerated),
+      dateLogged:     get_field(fields, @dateLogged),
+      timeLogged:     get_field(fields, @timeLogged),
+      altitude:       get_field(fields, @altitude) |> parse_integer,
+      alert?:         get_field(fields, @alert) |> parse_boolean,
+      spi?:           get_field(fields, @spi) |> parse_boolean,
+      isOnGround?:    get_field(fields, @isOnGround) |> parse_boolean
+    }
+  end
+  # Surveillance ID Message
+  defp parse_msg(["6" | fields]) do
+    %Aircraft{
+      icoa:           get_field(fields, @hexId),
+      dateGenerated:  get_field(fields, @dateGenerated),
+      timeGenerated:  get_field(fields, @timeGenerated),
+      dateLogged:     get_field(fields, @dateLogged),
+      timeLogged:     get_field(fields, @timeLogged),
+      altitude:       get_field(fields, @altitude) |> parse_integer,
+      squawk:         get_field(fields, @squawk) |> parse_integer,
+      alert?:         get_field(fields, @alert) |> parse_boolean,
+      emergency?:     get_field(fields, @emergency) |> parse_boolean,
+      spi?:           get_field(fields, @spi) |> parse_boolean,
+      isOnGround?:    get_field(fields, @isOnGround) |> parse_boolean
+    }
+  end
+  # Air To Air Message
+  defp parse_msg(["7" | fields]) do
+    %Aircraft{
+      icoa:           get_field(fields, @hexId),
+      dateGenerated:  get_field(fields, @dateGenerated),
+      timeGenerated:  get_field(fields, @timeGenerated),
+      dateLogged:     get_field(fields, @dateLogged),
+      timeLogged:     get_field(fields, @timeLogged),
+      altitude:       get_field(fields, @altitude) |> parse_integer,
+      isOnGround?:    get_field(fields, @isOnGround) |> parse_boolean
+    }
+  end
+  # All Call Reply
+  defp parse_msg(["8" | fields]) do
+    %Aircraft{
+      icoa:           get_field(fields, @hexId),
+      dateGenerated:  get_field(fields, @dateGenerated),
+      timeGenerated:  get_field(fields, @timeGenerated),
+      dateLogged:     get_field(fields, @dateLogged),
+      timeLogged:     get_field(fields, @timeLogged),
+      isOnGround?:    get_field(fields, @isOnGround) |> parse_boolean
+    }
+  end
   defp parse_msg([unknown | _fields]) do
     IO.inspect(unknown, label: "unknown message ID")
-    :not_supported
+    :unknown_msg_type
   end
+
+  # Helper methods
 
   defp get_field(fields, f) do
     String.trim(Enum.at(fields, f))
   end
 
- # # ES Surface Position Message
- # MSG,2
- #
- # MSG,3
- #
- # MSG,4
- #
- #  # Surveillance Alt Message
- # MSG,5
- #
- #  # Surveillance ID Message
- # MSG,6
- #
- #  # Air To Air Message
- # MSG,7
- #
- #  # All Call Reply
- # MSG,8
-
-  # def parse(_ignored) do
-  #   :not_supported
-  # end
-
   defp parse_boolean("0"), do: False
-  defp parse_boolean(_), do: True
+  defp parse_boolean("-1"), do: True
+  defp parse_boolean(_), do: False
 
   defp parse_integer(s) do
     case Integer.parse(s) do

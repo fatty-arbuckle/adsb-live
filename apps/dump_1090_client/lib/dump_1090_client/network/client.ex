@@ -47,6 +47,8 @@ defmodule Dump1090Client.Network.Client do
           case Aircraft.ParseAdsb.parse(msg) do
             aircraft = %Aircraft{icoa: _icoa} ->
               Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.update_topic, {:update, aircraft})
+            :unimplemented ->
+              Logger.warn("code not unimplemented for '#{msg}'")
             :not_supported ->
               :ok
           end
