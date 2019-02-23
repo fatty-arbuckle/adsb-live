@@ -47,9 +47,7 @@ defmodule Dump1090Client.Network.Client do
           case Aircraft.ParseAdsb.parse(msg) do
             aircraft = %Aircraft{icoa: _icoa} ->
               Phoenix.PubSub.broadcast(Aircraft.channel, Aircraft.update_topic, {:update, aircraft})
-            :unimplemented ->
-              Logger.warn("code not unimplemented for '#{msg}'")
-            :not_supported ->
+            _ ->
               :ok
           end
       end
@@ -77,21 +75,12 @@ defmodule Dump1090Client.Network.Client do
   end
 
   def handle_info({:tcp_closed, _socket}, state) do
-    case :gen_tcp.connect(state.host, state.port, []) do
-      {:ok, _socket} ->
-        new_state = %{state | failure_count: 0, connected: true}
-        new_state.on_connect.(new_state)
-        {:noreply, new_state}
-      {:error, _reason} ->
-        new_state = %{state | failure_count: 1, connected: false}
-        new_state.on_disconnect.(new_state)
-        {:noreply, new_state, state.retry_interval}
-    end
+    {:noreply, state}
   end
 
   defp opts_to_initial_state(opts) do
     state = %{
-      host: "localhost",
+      host: '127.0.0.1',
       port: 30003,
       max_retries: 10,
       retry_interval: 1000,

@@ -133,4 +133,8 @@ defmodule ParseTest do
     }
     assert expected == Aircraft.ParseAdsb.parse(rawMessage)
   end
+
+  test "Unknown MSG subtype" do
+    assert :unknown_msg_type == Aircraft.ParseAdsb.parse("MSG,9,,,,,,,,,,,,,,,,,,,,")
+  end
 end
