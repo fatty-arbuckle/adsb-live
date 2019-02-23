@@ -25,6 +25,8 @@
       <th scope="col">altitude</th>
       <th scope="col">speed</th>
       <th scope="col">heading</th>
+      <th scope="col">vertical speed</th>
+      <!-- <th scope="col">on ground</th> -->
       <th scope="col">messages</th>
       <!-- <th scope="col">last_seen_time</th> -->
     </tr>
