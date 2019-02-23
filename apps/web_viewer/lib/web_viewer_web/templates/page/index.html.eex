@@ -8,7 +8,7 @@
       aria-expanded="false"
       aria-controls="aircraftTable"
       data-toggle="tooltip"
-      title="Tabular aircraft data.  Click for details."
+      title="Unique aircraft per second.  Click for details."
   >
     <span id="sparkline" class="float-left text-left" style="width: 85%"></span>
     <span id="rate" float-right>No messages</span>
@@ -44,7 +44,7 @@
       aria-expanded="false"
       aria-controls="rawMessages"
       data-toggle="tooltip"
-      title="Raw ADS-B messages.  Click for details."
+      title="Raw ADS-B messages per second.  Click for details."
   >
     <span id="sparkline" class="float-left text-left" style="width: 85%"></span>
     <span id="rate" float-right>No messages</span>

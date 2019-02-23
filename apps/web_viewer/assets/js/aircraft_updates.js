@@ -6,8 +6,7 @@ import {Socket} from "phoenix"
 var markAsNoMessageInterval = 30 * 1000;
 var deleteAircraftInterval = 120 * 1000;
 // Updated by channel, used by graph
-var aircraftMessageCount = 0;
-var lastAircraftMessageCount = 0;
+var aircraftMessageCount = {};
 // holds maps of icoa to timeouts
 var deleteTimerMap = {};
 // messages per icoa
@@ -38,11 +37,11 @@ function grayOutAircraft(key) {
 channel.on("aircraft:updates", data => {
   // console.log(data)
   if ('update' in data) {
-    ++aircraftMessageCount;
     var aircraft = data.update
     var liveAircraftList = $( "#live-aircraft" )
     // var deadAircraftList = $( "#dead-aircraft" )
     var icoa = aircraft.icoa;
+    aircraftMessageCount[icoa] = 1;
     var icoaRow = $("#" + icoa)
     if (icoaRow.length == 0) {
       messagesPerIcoa[icoa] = 1;
@@ -95,8 +94,8 @@ channel.on("aircraft:updates", data => {
 
 
 messageSparkline("#aircraft_update_sparkline", 1, function(intervalInSeconds){
-  var messageRate = (aircraftMessageCount - lastAircraftMessageCount) / intervalInSeconds;
-  lastAircraftMessageCount = aircraftMessageCount;
+  var messageRate = (Object.keys(aircraftMessageCount).length) / intervalInSeconds;
+  aircraftMessageCount = {}
   return messageRate;
 });
 
@@ -157,7 +156,7 @@ function messageSparkline(selector, intervalInSeconds, updateRate) {
     data.unshift(0);
 
     var rawMessageRate = updateRate(intervalInSeconds);
-    rateChild.text(rawMessageRate + " msg / second")
+    rateChild.text(rawMessageRate + " aircraft / second")
     data.push(rawMessageRate);
 
     data.push(0);
