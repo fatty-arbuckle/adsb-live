@@ -1,0 +1,12 @@
+FROM postgres:11.1-alpine
+
+RUN apk --no-cache add wget
+
+RUN mkdir -p /faa_data
+WORKDIR /faa_data
+
+RUN wget -L http://registry.faa.gov/database/ReleasableAircraft.zip
+RUN unzip ReleasableAircraft.zip
+
+#COPY init-user-db.sh /docker-entrypoint-initdb.d/init-user-db.sh
+COPY initdb/*.sh /docker-entrypoint-initdb.d/

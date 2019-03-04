@@ -149,7 +149,10 @@ defmodule Aircraft.ParseAdsb do
   # Helper methods
 
   defp get_field(fields, f) do
-    String.trim(Enum.at(fields, f))
+    case Enum.at(fields, f) do
+      value -> String.trim(value)
+      nil   -> nil
+    end
   end
 
   defp parse_boolean("0"), do: False
