@@ -10,7 +10,7 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
   \connect aircraft_registry
   CREATE TABLE public.${table}
   (
-      code            character varying(100),
+      code            character varying(100) primary key,
       mfr             character varying(100),
       model           character varying(100),
       type_acft       character varying(100),

@@ -43,7 +43,7 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
     unique_id         character varying(100),
     kit_mfr           character varying(100),
     kit_model         character varying(100),
-    mode_s_code_hex   character varying(100),
+    mode_s_code_hex   character varying(100) primary key,
     junk              character varying(100)
   );
 
