@@ -98,6 +98,9 @@ channel.on("aircraft:updates", data => {
       // }
       icoaRow.children('#messages').text(messagesPerIcoa[icoa])
     }
+  } else if ('aircraft_registry' in data) {
+    // TODO output registry data
+    // console.log(data);
   }
 })
 
