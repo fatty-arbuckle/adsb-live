@@ -68,7 +68,6 @@ defmodule AircraftRegistry do
 
   defp convert_to_struct(query) do
     raw = Enum.zip(query.columns, Enum.at(query.rows, 0)) |> Enum.into(%{})
-    IO.inspect(raw)
     %AircraftRegistry{
       icoa:                   String.trim(raw["mode_s_code_hex"]),
       registrant:             String.trim(raw["name"]),

@@ -17,7 +17,21 @@ defmodule WebViewerWeb.AircraftUpdatesChannel do
       {:raw, raw_message} ->
         WebViewerWeb.Endpoint.broadcast!("aircraft:updates", "aircraft:updates", %{raw: raw_message})
       {:update, aircraft} ->
-        WebViewerWeb.Endpoint.broadcast!("aircraft:updates", "aircraft:updates", %{update: aircraft})
+        WebViewerWeb.Endpoint.broadcast!(
+          "aircraft:updates",
+          "aircraft:updates",
+          %{update: aircraft}
+        )
+        case AircraftRegistry.lookup_icoa aircraft.icoa do
+          {:error, error} ->
+            IO.inspect(error, label: "registry lookup error for #{aircraft.icoa}")
+          registry ->
+            WebViewerWeb.Endpoint.broadcast!(
+              "aircraft:updates",
+              "aircraft:updates",
+              %{aircraft_registry: registry}
+            )
+        end
         nil
     end
     {:noreply, state}
